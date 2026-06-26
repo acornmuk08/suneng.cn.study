@@ -4,10 +4,12 @@
 
 1. 먼저
 <img width="690" height="172" alt="image" src="https://github.com/user-attachments/assets/93c4ddb2-77c6-46dd-9ca1-0f1dce417d96" />
+
 __형광펜 칠한 곳을 클릭합니다.__
 
 2. 우측의
 <img width="316" height="183" alt="image" src="https://github.com/user-attachments/assets/37065bb5-8e59-4732-9c39-61baab03ec09" />
+
 __형광펜 칠한 곳을 클릭하여 파일을 다운로드 합니다.__
 
 3. 이후
