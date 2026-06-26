@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>중국어 어휘 마스터 퀴즈 v2</title>
+    <title>수능 중국어 기본어휘 퀴즈</title>
     <style>
         :root {
             --primary: #1e293b;
@@ -69,8 +69,6 @@
             backdrop-filter: blur(4px);
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
-
-        /* 파일 업로드 영역 */
         .upload-zone {
             background-color: var(--card-bg);
             border: 2px dashed var(--border);
@@ -96,8 +94,6 @@
         #csvFile {
             display: none;
         }
-
-        /* 대시보드 구조 */
         .main-layout {
             display: grid;
             grid-template-columns: 240px 1fr;
@@ -110,8 +106,6 @@
                 grid-template-columns: 1fr;
             }
         }
-
-        /* 사이드바 모드 변경 버튼 */
         .sidebar {
             display: flex;
             flex-direction: column;
@@ -143,8 +137,6 @@
             border-color: var(--accent);
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
         }
-
-        /* 퀴즈 메인 영역 카드 */
         .quiz-card {
             background-color: var(--card-bg);
             border-radius: 16px;
@@ -182,8 +174,6 @@
         .hz-large { font-size: 48px; letter-spacing: 2px; }
         .py-medium { font-size: 32px; color: #4338ca; }
         .mn-medium { font-size: 26px; color: #334155; }
-
-        /* 선지 컨테이너 */
         .options-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -233,8 +223,6 @@
             color: var(--incorrect) !important;
             font-weight: 700;
         }
-
-        /* 피드백 및 전체보기 오답 해설 섹션 */
         .explanation-section {
             margin-top: 28px;
             padding-top: 24px;
@@ -313,6 +301,57 @@
         .card-detail strong { color: var(--primary); }
         .text-tone-hl { color: #0284c7; font-weight: 600; }
 
+        .next-btn-container {
+            margin-top: 24px;
+            text-align: right;
+        }
+
+        .next-action-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .next-action-btn:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div>
+            <h1>수능 중국어 기본어휘 퀴즈           border-color: var(--incorrect);
+            background-color: var(--incorrect-light);
+        }
+
+        .card-tag {
+            font-size: 11px;
+            font-weight: 700;
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .tag-correct { background-color: var(--correct); color: white; }
+        .tag-wrong { background-color: var(--incorrect); color: white; }
+        .tag-normal { background-color: #e2e8f0; color: #475569; }
+
+        .card-hz { font-size: 20px; font-weight: 700; margin-bottom: 4px; color: var(--primary); }
+        .card-detail { font-size: 13px; color: #475569; margin: 2px 0; }
+        .card-detail strong { color: var(--primary); }
+        .text-tone-hl { color: #0284c7; font-weight: 600; }
+
         /* 다음 버튼 */
         .next-btn-container {
             margin-top: 24px;
@@ -343,8 +382,8 @@
 <div class="container">
     <header>
         <div>
-            <h1>🇨🇳 중국어 단어 마스터 프로그램</h1>
-            <p style="margin: 5px 0 0 0; opacity: 0.8; font-size: 14px;">데이터 완벽 교정 및 실시간 성조 정규식 매칭 에디션</p>
+            <h1>수능 중국어 기본어휘 퀴즈</h1>
+            <p style="margin: 5px 0 0 0; opacity: 0.8; font-size: 14px;"><a href="https://github.com/acornmuk08/suneng.cn.study">먼저 여기를 눌러 사용 방법을 익히세요!</a></p>
         </div>
         <div class="scoreboard" id="scoreboard">퀴즈 대기 중</div>
     </header>
@@ -354,7 +393,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
         </svg>
         <p><strong>[중국어 기본어휘.csv]</strong> 파일을 드래그하여 놓거나 클릭하여 선택하세요.</p>
-        <p style="font-size: 12px; color: #94a3b8;">(구글 스프레드시트에서 CSV 파일로 다운로드한 데이터 형식 완벽 지원)</p>
+        <p style="font-size: 12px; color: #94a3b8;">상단에 "여기를 눌러 사용 방법을 익히세요"를 꼭 눌러주세요.)</p>
         <input type="file" id="csvFile" accept=".csv">
     </div>
 
@@ -416,16 +455,10 @@
     const optionsGridContainer = document.getElementById('optionsGrid');
     const explanationSectionPanel = document.getElementById('explanationSection');
     const nextActionButton = document.getElementById('nextButton');
-
-    // 실시간 정규식 기반 성조 패턴 연산 함수 (핵심 수정)
     function calculateTonePattern(pinyinField) {
         if (!pinyinField) return "성조 정보 불명";
-        // 복수 발음 구분 기호(/)가 있을 경우 첫 번째 대표 발음 채택
         let cleanPinyin = pinyinField.split('/')[0].trim();
-        // 괄호 구조 및 내부 기호(예: 汽, qì) 일괄 정제
         cleanPinyin = cleanPinyin.replace(/\([^)]*\)/g, '');
-
-        // 중국어 음절 분리를 위한 완벽한 정규식 매칭 패턴 모델 생성
         const syllableRegexPattern = /(zh|ch|sh|b|p|m|f|d|t|n|l|g|k|h|j|q|x|r|z|c|s|y|w)?[aāáǎàoōóǒòeēéěèiīíǐìuūúǔùüǖǘǚǜv]+(ng|n|r)?/gi;
         const matchedSyllables = cleanPinyin.match(syllableRegexPattern);
         
@@ -444,8 +477,6 @@
         }
         return calculatedPatternSeq.join("-");
     }
-
-    // 쉼표 기호가 포함된 구글 CSV 셀을 정밀 분리하는 데이터 분석 파서
     function customQuoteAwareCSVParser(rawText) {
         const textLines = rawText.split(/\r?\n/);
         const parsedDataSet = [];
@@ -470,8 +501,6 @@
                 }
             }
             extractedColumns.push(currentCellBuffer.trim());
-
-            // 양 끝 잔여 따옴표 제거 작업
             const finalCleanColumns = extractedColumns.map(cell => {
                 let text = cell;
                 if (text.startsWith('"') && text.endsWith('"')) {
@@ -479,12 +508,10 @@
                 }
                 return text.trim();
             });
-
-            // 시트 구조 보장 처리 [0:한자, 1:병음, 2:성조, 3:뜻, 4:품사]
             if (finalCleanColumns.length >= 4 && finalCleanColumns[0]) {
                 const rawHanzi = finalCleanColumns[0];
                 const rawPinyin = finalCleanColumns[1];
-                const rawMeaning = finalCleanColumns[3]; // 정확한 인덱스 3 매핑 적용
+                const rawMeaning = finalCleanColumns[3];
                 const rawPos = finalCleanColumns[4] || "기타";
 
                 parsedDataSet.push({
@@ -492,14 +519,12 @@
                     pinyin: rawPinyin,
                     meaning: rawMeaning,
                     pos: rawPos,
-                    tonePattern: calculateTonePattern(rawPinyin) // 실시간 분석 패턴 바인딩
+                    tonePattern: calculateTonePattern(rawPinyin)
                 });
             }
         }
         return parsedDataSet;
     }
-
-    // 파일 로드 이벤트 리스너 핸들러
     csvFileInput.addEventListener('change', function(e) {
         const fileTarget = e.target.files[0];
         if (!fileTarget) return;
@@ -513,8 +538,6 @@
                 alert("퀴즈 게임 구동을 위해서는 데이터 개수가 최소 4개 이상이어야 합니다. 파일을 확인해주세요.");
                 return;
             }
-
-            // UI 뷰 스위칭 동작
             dropZonePanel.style.display = 'none';
             mainLayoutContainer.style.display = 'grid';
             refreshScoreboardDisplay();
@@ -522,8 +545,6 @@
         };
         fileReaderObj.readAsText(fileTarget, 'UTF-8');
     });
-
-    // 드래그 앤 드롭 파일 로직 데코레이터
     dropZonePanel.addEventListener('dragover', (e) => { e.preventDefault(); dropZonePanel.style.borderColor = 'var(--accent)'; });
     dropZonePanel.addEventListener('dragleave', () => { dropZonePanel.style.borderColor = 'var(--border)'; });
     dropZonePanel.addEventListener('drop', (e) => {
@@ -533,8 +554,6 @@
             csvFileInput.dispatchEvent(new Event('change'));
         }
     });
-
-    // 사이드바 전용 모드 전환 컨트롤 이벤트 할당
     document.querySelectorAll('.mode-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
@@ -546,16 +565,12 @@
             }
         });
     });
-
-    // 배열 항목 랜덤 스와핑 헬퍼 함수
     function randomizeArrayShuffle(targetArray) {
         for (let i = targetArray.length - 1; i > 0; i--) {
             const randomPickIdx = Math.floor(Math.random() * (i + 1));
             [targetArray[i], targetArray[randomPickIdx]] = [targetArray[randomPickIdx], targetArray[i]];
         }
     }
-
-    // 점수판 인디케이터 데이터 새로고침
     function refreshScoreboardDisplay() {
         if(totalSolvedCount === 0) {
             scoreboardLabel.innerText = "진행률: 0문항 풀이완료";
@@ -564,22 +579,16 @@
             scoreboardLabel.innerText = `정답률: ${correctRatio}% (${totalCorrectCount}/${totalSolvedCount} 맞춤)`;
         }
     }
-
-    // 핵심 무작위 문제 출제 코어 기능 함수
     function generateQuestion() {
         explanationSectionPanel.style.display = "none";
         explanationSectionPanel.innerHTML = "";
         nextActionButton.style.display = "none";
-
-        // 문제 대상 정답 단어 랜덤 초이스 추출
         const pickedRandomIndex = Math.floor(Math.random() * wordVocabulary.length);
         currentQuestionWord = wordVocabulary[pickedRandomIndex];
         
         selectedChoicesList = [];
-
-        // 모드 분기 스위칭 처리 블록
         if (currentQuizMode === "1") {
-            quizTitleHeader.innerText = "모드 1: 제시된 한자의 올바른 '한국어 뜻'을 고르세요.";
+            quizTitleHeader.innerText = "제시된 한자의 올바른 '한국어 뜻'을 고르세요.";
             questionTextDisplay.innerText = currentQuestionWord.hanzi;
             questionTextDisplay.className = "question-text hz-large";
 
@@ -592,7 +601,7 @@
             }
         } 
         else if (currentQuizMode === "2") {
-            quizTitleHeader.innerText = "모드 2: 제시된 병음의 올바른 '한국어 뜻'을 고르세요.";
+            quizTitleHeader.innerText = "제시된 병음의 올바른 '한국어 뜻'을 고르세요.";
             questionTextDisplay.innerText = currentQuestionWord.pinyin;
             questionTextDisplay.className = "question-text py-medium";
 
@@ -605,17 +614,15 @@
             }
         } 
         else if (currentQuizMode === "3") {
-            quizTitleHeader.innerText = "모드 3: 제시된 단어와 '똑같은 성조 패턴'을 가진 한자를 고르세요.";
+            quizTitleHeader.innerText = "제시된 단어와 성조 배열이 같은 것을 고르세요";
             questionTextDisplay.innerText = `${currentQuestionWord.hanzi} [${currentQuestionWord.pinyin}]`;
             questionTextDisplay.className = "question-text mn-medium";
-
-            // 정밀 추출된 실시간 성조 패턴 풀을 기반으로 정답 보기를 필터링
             let candidatesWithSameTone = wordVocabulary.filter(w => w.tonePattern === currentQuestionWord.tonePattern && w.hanzi !== currentQuestionWord.hanzi);
             let targetCorrectOption;
             if (candidatesWithSameTone.length > 0) {
                 targetCorrectOption = candidatesWithSameTone[Math.floor(Math.random() * candidatesWithSameTone.length)];
             } else {
-                targetCorrectOption = currentQuestionWord; // 일치 항목 부족 시 자기 자신 예외 대응
+                targetCorrectOption = currentQuestionWord;
             }
 
             selectedChoicesList.push(targetCorrectOption);
@@ -627,8 +634,8 @@
             }
         } 
         else if (currentQuizMode === "4") {
-            quizTitleHeader.innerText = "모드 4: 제시된 뜻을 가진 알맞은 '한자'를 고르세요.";
-            questionTextDisplay.innerText = currentQuestionWord.meaning; // 병음 노출 버그 철저 수정 완료
+            quizTitleHeader.innerText = "제시된 한국어 뜻을 가진 알맞은 '한자'를 고르세요.";
+            questionTextDisplay.innerText = currentQuestionWord.meaning;
             questionTextDisplay.className = "question-text mn-medium";
 
             selectedChoicesList.push(currentQuestionWord);
@@ -639,19 +646,13 @@
                 }
             }
         }
-
-        // 선지 무작위 셔플링 및 인덱스 복구 추적 연산
         let referenceCorrectObject = (currentQuizMode === "3") ? selectedChoicesList[0] : currentQuestionWord;
         randomizeArrayShuffle(selectedChoicesList);
         correctChoiceIndex = selectedChoicesList.indexOf(referenceCorrectObject);
-
-        // 정답 버튼 동적 UI 빌드 처리
         optionsGridContainer.innerHTML = "";
         selectedChoicesList.forEach((choice, index) => {
             const optionButton = document.createElement('button');
             optionButton.className = "option-btn";
-            
-            // 모드 특성에 일치하는 올바른 출력 텍스트 매핑 할당
             if (currentQuizMode === "1" || currentQuizMode === "2") {
                 optionButton.innerText = `${index + 1}. ${choice.meaning}`;
             } else {
@@ -662,14 +663,12 @@
             optionsGridContainer.appendChild(optionButton);
         });
     }
-
-    // 정답 클릭 처리 이벤트 핸들러
     function processUserAnswerSubmission(userSelectedIndex) {
         totalSolvedCount++;
         const optionButtons = optionsGridContainer.querySelectorAll('.option-btn');
 
         optionButtons.forEach((btn, index) => {
-            btn.disabled = true; // 다중 클릭 차단
+            btn.disabled = true;
             if (index === correctChoiceIndex) {
                 btn.classList.add('correct');
             } else if (index === userSelectedIndex) {
@@ -686,8 +685,6 @@
         generateDetailedFeedbackLayout(userSelectedIndex, isUserCorrect);
         nextActionButton.style.display = "block";
     }
-
-    // 4개 보기의 모든 성조와 병음을 낱낱이 해부하여 보여주는 프리미엄 해설 기능 (요청 사항 반영)
     function generateDetailedFeedbackLayout(userSelectedIndex, isUserCorrect) {
         explanationSectionPanel.style.display = "block";
         
@@ -704,7 +701,7 @@
                     | 뜻: ${currentQuestionWord.meaning} (${currentQuestionWord.pos})
                 </div>
             </div>
-            <h3 style="font-size: 15px; margin: 20px 0 10px 0; color: var(--primary);">🔍 1~4번 모든 보기 선지 성조·뜻 상세 분석 피드백</h3>
+            <h3 style="font-size: 15px; margin: 20px 0 10px 0; color: var(--primary);">🔍 상세 분석 피드백</h3>
             <div class="choices-card-grid">
         `;
 
