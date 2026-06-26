@@ -3,677 +3,812 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>수능특강 중국어 암기 프로그램</title>
+    <title>중국어 단어 암기 프로그램</title>
     <style>
         :root {
-            --bg-color: #f4f6f9;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --text-color: #333333;
-            --text-secondary: #666666;
-            --primary-color: #4a90e2;
-            --primary-hover: #357abd;
-            --success-color: #2ec4b6;
-            --error-color: #e71d36;
-            --border-color: #e0e0e0;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --primary-color: #3b82f6;
+            --primary-hover: #2563eb;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --btn-bg: #f1f5f9;
+            --btn-hover: #cbd5e1;
         }
 
         body.dark-mode {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-color: #f0f0f0;
-            --text-secondary: #b0b0b0;
-            --primary-color: #3a7bd5;
-            --primary-hover: #2a6bb5;
-            --success-color: #1b9aaa;
-            --error-color: #ff4d6d;
-            --border-color: #333333;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --primary-color: #60a5fa;
+            --primary-hover: #3b82f6;
+            --btn-bg: #334155;
+            --btn-hover: #475569;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         body {
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            transition: background-color 0.3s, color 0.3s;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
             width: 100%;
-            max-width: 700px;
+            max-width: 600px;
             background-color: var(--card-bg);
-            padding: 25px;
             border-radius: 16px;
-            box-shadow: var(--shadow);
-            transition: background-color 0.3s;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+            padding: 30px;
             position: relative;
+            border: 1px solid var(--border-color);
         }
 
-        header {
+        /* 상단 유틸리티 버튼 */
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 15px;
+            margin-bottom: 24px;
+        }
+
+        .theme-toggle, .back-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .theme-toggle:hover, .back-btn:hover {
+            background-color: var(--btn-bg);
         }
 
         h1 {
-            font-size: 22px;
-            margin: 0;
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        /* 스크린 제어 */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* 로딩 스크린 */
+        #loading-screen {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--border-color);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 메인 메뉴 설정 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
         }
 
         .btn {
-            background-color: var(--primary-color);
-            color: white;
+            width: 100%;
+            padding: 14px;
             border: none;
-            padding: 10px 18px;
             border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
             cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.2s, transform 0.1s;
+            text-align: center;
         }
 
-        .btn:hover {
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
             background-color: var(--primary-hover);
         }
 
-        .btn:active {
-            transform: scale(0.98);
-        }
-
         .btn-secondary {
-            background-color: transparent;
+            background-color: var(--btn-bg);
             color: var(--text-color);
             border: 1px solid var(--border-color);
         }
 
         .btn-secondary:hover {
-            background-color: var(--border-color);
+            background-color: var(--btn-hover);
         }
 
-        .btn-danger {
-            background-color: var(--error-color);
-            color: white;
-        }
-
-        .mode-toggle-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .section {
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        /* 데이터 입력 영역 */
-        textarea {
-            width: 100%;
-            height: 150px;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            resize: vertical;
-            font-family: monospace;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-        }
-
-        /* 단어장 리스트 스타일 */
-        .word-table-container {
+        /* 전체 단어 리스트 스크린 */
+        .word-list-container {
             max-height: 400px;
             overflow-y: auto;
-            margin-top: 15px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
+            margin-bottom: 20px;
         }
 
-        table {
+        .word-table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
         }
 
-        th, td {
+        .word-table th, .word-table td {
             padding: 12px;
             border-bottom: 1px solid var(--border-color);
         }
 
-        th {
-            background-color: var(--bg-color);
+        .word-table th {
+            background-color: var(--btn-bg);
             position: sticky;
             top: 0;
+            font-weight: bold;
         }
 
-        .hide-text {
-            background-color: var(--text-color);
-            color: var(--text-color);
-            cursor: pointer;
-            border-radius: 4px;
-            padding: 2px 6px;
-        }
-
-        .hide-text:hover {
-            opacity: 0.8;
-        }
-
-        .hide-text.revealed {
-            background-color: transparent;
-            color: inherit;
-        }
-
-        /* 퀴즈 영역 스타일 */
+        /* 테스트 스크린 */
         .quiz-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            font-weight: 600;
         }
 
-        .progress-bar {
+        .progress-bar-container {
             width: 100%;
-            height: 8px;
+            height: 6px;
             background-color: var(--border-color);
-            border-radius: 4px;
-            margin-bottom: 20px;
+            border-radius: 3px;
+            margin-bottom: 24px;
             overflow: hidden;
         }
 
-        .progress-fill {
+        .progress-bar {
             height: 100%;
             background-color: var(--primary-color);
             width: 0%;
-            transition: width 0.3s;
+            transition: width 0.3s ease;
         }
 
         .question-box {
             text-align: center;
-            margin: 30px 0;
-            padding: 20px;
-            background-color: var(--bg-color);
+            padding: 30px 10px;
+            background-color: var(--btn-bg);
             border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .question-title {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
         }
 
         .question-text {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .question-hint {
-            font-size: 16px;
-            color: var(--text-secondary);
+            font-size: 2.2rem;
+            font-weight: bold;
         }
 
         .options-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .option-btn {
             background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
             color: var(--text-color);
-            border: 2px solid var(--border-color);
-            padding: 15px;
-            border-radius: 10px;
             text-align: left;
-            font-size: 16px;
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
             cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
+            display: flex;
+            align-items: center;
         }
 
         .option-btn:hover:not(:disabled) {
-            border-color: var(--primary-color);
-            background-color: var(--bg-color);
+            background-color: var(--btn-bg);
+            border-color: var(--text-muted);
         }
 
         .option-btn.correct {
-            background-color: var(--success-color) !important;
-            color: white !important;
+            background-color: rgba(16, 185, 129, 0.15) !important;
             border-color: var(--success-color) !important;
+            color: var(--success-color);
+            font-weight: bold;
         }
 
         .option-btn.incorrect {
-            background-color: var(--error-color) !important;
-            color: white !important;
-            border-color: var(--error-color) !important;
+            background-color: rgba(239, 68, 68, 0.15) !important;
+            border-color: var(--danger-color) !important;
+            color: var(--danger-color);
         }
 
         .feedback-box {
-            text-align: center;
-            font-size: 18px;
-            font-weight: 600;
+            padding: 15px;
+            border-radius: 8px;
             margin-bottom: 20px;
-            min-height: 27px;
-        }
-
-        /* 정지 화면 오버레이 */
-        .pause-overlay {
             display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            z-index: 10;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-color);
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger-color);
+        }
+
+        /* 결과 스크린 */
+        .result-stats {
             text-align: center;
+            margin: 30px 0;
         }
 
-        .pause-overlay.active {
-            display: flex;
+        .score-text {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-color);
         }
 
-        .menu-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        .wrong-list-title {
+            font-weight: bold;
             margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .wrong-words {
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.9rem;
+            background-color: var(--btn-bg);
+        }
+
+        .wrong-item {
+            margin-bottom: 6px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 4px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="pauseOverlay" class="pause-overlay">
-        <h2>일시 정지됨</h2>
-        <p style="color: var(--text-secondary); margin-bottom: 20px;">잠시 학습을 멈추었습니다.</p>
-        <button class="btn" onclick="resumeQuiz()">다시 시작하기</button>
+    <div class="top-bar">
+        <button id="back-btn" class="back-btn" style="display: none;" onclick="goHome()">🏠 메인으로</button>
+        <div style="flex-grow: 1;"></div>
+        <button class="theme-toggle" onclick="toggleDarkMode()">🌓 모드 변경</button>
     </div>
 
-    <header>
-        <h1 id="programTitle" onclick="goHome()" style="cursor:pointer;">🇨🇳 중국어 단어 암기기</h1>
-        <button id="themeToggle" class="mode-toggle-btn" onclick="toggleDarkMode()">🌙</button>
-    </header>
+    <div id="loading-screen" class="screen active">
+        <div class="spinner"></div>
+        <p id="loading-text">구글 스프레드시트에서 실시간으로 단어를 가져오는 중...</p>
+    </div>
 
-    <div id="setupSection" class="section active">
-        <h3>1. 스프레드시트 데이터 붙여넣기</h3>
-        <p style="font-size:14px; color:var(--text-secondary);">스프레드시트에서 <b>한자, 병음, 한국어뜻</b> 열을 복사하여 아래에 붙여넣으세요. (탭 구분 지원)</p>
-        <textarea id="dataInput" placeholder="예시 표기형식:&#10;学生	xuéshēng	학생&#10;老师	lǎoshī	선생님&#10;韩国	hánguó	한국"></textarea>
-        <div style="margin-bottom: 25px;">
-            <button class="btn" onclick="loadData()">데이터 불러오기 / 리셋</button>
-            <span id="loadStatus" style="margin-left: 10px; font-weight: 600;"></span>
+    <div id="main-screen" class="screen">
+        <h1>중국어 단어 암기장</h1>
+        <p class="subtitle">스프레드시트 연동 완료</p>
+
+        <div class="form-group">
+            <label for="mode-select">학습 모드 선택</label>
+            <select id="mode-select">
+                <option value="1">1. 한자 ➔ 한국어 뜻 찾기</option>
+                <option value="2">2. 병음 ➔ 한국어 뜻 찾기</option>
+                <option value="3">3. 한자 ➔ 똑같은 성조 찾기</option>
+                <option value="4">4. 한국어 뜻 ➔ 한자 찾기</option>
+            </select>
         </div>
 
-        <div id="menuArea" style="display: none;">
-            <h3>2. 사전 학습 (전체 단어 보기)</h3>
-            <button class="btn btn-secondary" onclick="openStudySection()">시험 보기 전 단어 외우기</button>
+        <div class="form-group">
+            <label for="count-select">문제 수 설정</label>
+            <select id="count-select">
+                <option value="10">10 문제</option>
+                <option value="20">20 문제</option>
+                <option value="30">30 문제</option>
+                <option value="all">전체 문제</option>
+            </select>
+        </div>
 
-            <h3 style="margin-top:25px;">3. 테스트 모드 선택</h3>
-            <div class="menu-grid">
-                <button class="btn" onclick="startQuiz(1)">1. 한자 ➔ 한국어 뜻</button>
-                <button class="btn" onclick="startQuiz(2)">2. 병음 ➔ 한국어 뜻</button>
-                <button class="btn" onclick="startQuiz(3)">3. 동일 성조 한자 찾기</button>
-                <button class="btn" onclick="startQuiz(4)">4. 한국어 뜻 ➔ 한자</button>
-            </div>
+        <div class="menu-buttons">
+            <button class="btn btn-primary" onclick="startTest()">✍️ 테스트 시작</button>
+            <button class="btn btn-secondary" onclick="showStudyScreen()">📖 시험 전 전체 단어 공부하기</button>
         </div>
     </div>
 
-    <div id="studySection" class="section">
-        <div style="display:flex; justify-content: space-between; align-items:center;">
-            <h3>시험 전 전체 단어 리스트</h3>
-            <button class="btn btn-secondary" onclick="goHome()">메인으로</button>
-        </div>
-        <p style="font-size:14px; color:var(--text-secondary);">뜻이나 한자를 클릭하면 가려진 텍스트를 볼 수 있어 자가 테스트가 가능합니다.</p>
-        <div class="word-table-container">
-            <table>
+    <div id="study-screen" class="screen">
+        <h1>📖 전체 단어 리스트</h1>
+        <p class="subtitle">시험 보기 전 미리 암기해보세요!</p>
+        
+        <div class="word-list-container">
+            <table class="word-table">
                 <thead>
                     <tr>
                         <th>한자</th>
                         <th>병음</th>
-                        <th>성조 패턴</th>
-                        <th>한국어 뜻</th>
+                        <th>뜻</th>
                     </tr>
                 </thead>
-                <tbody id="wordTableBody"></tbody>
+                <tbody id="word-table-body">
+                    </tbody>
             </table>
         </div>
+        <button class="btn btn-primary" onclick="goHome()">돌아가기</button>
     </div>
 
-    <div id="quizSection" class="section">
+    <div id="test-screen" class="screen">
         <div class="quiz-header">
-            <span id="quizProgress" style="font-weight: 600;">문제 1 / 10</span>
-            <div>
-                <button class="btn btn-secondary" style="padding: 6px 12px;" onclick="pauseQuiz()">⏸ 중간 정지</button>
-                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="confirmStopQuiz()">종료</button>
-            </div>
+            <span id="quiz-progress">문제 1 / 10</span>
+            <button class="back-btn" onclick="stopTest()" style="padding: 4px 10px; font-size: 0.85rem;">⏹️ 중간 중지</button>
         </div>
-        <div class="progress-bar">
-            <div id="progressFill" class="progress-fill"></div>
+        <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
         </div>
 
         <div class="question-box">
-            <div id="questionHint" class="question-hint">질문 유형</div>
-            <div id="questionText" class="question-text">学生</div>
+            <div id="question-title" class="question-title">제시된 단어의 뜻을 고르세요.</div>
+            <div id="question-text" class="question-text">学习</div>
         </div>
 
-        <div id="optionsContainer" class="options-container">
+        <div id="options-container" class="options-container">
             </div>
 
-        <div id="feedbackBox" class="feedback-box"></div>
-        
-        <div style="text-align: right;">
-            <button id="nextBtn" class="btn" style="display: none;" onclick="nextQuestion()">다음 문제 ➔</button>
+        <div id="feedback-box" class="feedback-box">
+            </div>
+
+        <button id="next-btn" class="btn btn-primary" style="display: none;" onclick="nextQuestion()">다음 문제 ➔</button>
+    </div>
+
+    <div id="result-screen" class="screen">
+        <h1>🎉 테스트 완료</h1>
+        <p class="subtitle">수고하셨습니다!</p>
+
+        <div class="result-stats">
+            <p>당신의 점수는?</p>
+            <div id="score-text" class="score-text">0 / 10</div>
+        </div>
+
+        <div id="wrong-section" style="display: none;">
+            <div class="wrong-list-title">❌ 틀린 단어 오답노트</div>
+            <div id="wrong-words-container" class="wrong-words">
+                </div>
+        </div>
+
+        <div class="menu-buttons" style="margin-top: 24px;">
+            <button class="btn btn-primary" onclick="goHome()">다시 테스트하기</button>
         </div>
     </div>
 </div>
 
 <script>
-    // 기본 샘플 데이터 (스프레드시트 비어있을 시 최초 구동용)
-    const sampleData = `你好	nǐhǎo	안녕하세요
-谢谢	xièxie	감사합니다
-再见	zàijiàn	안녕히 가세요
-苹果	píngguǒ	사과
-学生	xuéshēng	학생
-老师	lǎoshī	선생님
-中国	zhōngguó	중국
-韩国	hánguó	한국
-面包	miànbāo	빵
-咖啡	kāfēi	커피`;
+    // --- 설정 ---
+    const SPREADSHEET_ID = '1Z5Os0dX67YQsEpr9CggIxZS410HT-izJGfk3ljY2zaQ';
+    // 구글 스프레드시트의 데이터를 CSV 형태로 가져오는 엔드포인트
+    const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv`;
 
-    let wordList = [];
-    let quizQuestions = [];
-    let currentQuizIndex = 0;
-    let quizMode = 1;
-    let score = 0;
+    // 만약 스프레드시트 열 순서가 다르다면 아래 숫자를 수정하세요 (0이 첫 번째 열)
+    const COL_HANZI = 0;   // 한자 열
+    const COL_PINYIN = 1;  // 병음 열
+    const COL_MEANING = 2; // 뜻 열
 
-    // 초기 실행
-    window.onload = function() {
-        document.getElementById('dataInput').value = sampleData;
-        loadData();
-    };
+    let wordList = [];       // 로딩된 전체 단어 저장소
+    let quizQueue = [];      // 진행할 퀴즈 단어 배열
+    let currentIdx = 0;      // 현재 문제 번호
+    let score = 0;           // 맞은 개수
+    let currentMode = "1";   // 선택된 모드
+    let wrongWords = [];     // 오답 보관용 배열
+    let isAnswered = false;  // 답안 제출 여부
 
-    // 다크모드 토글
+    // --- 다크 모드 제어 ---
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        document.getElementById('themeToggle').innerText = isDark ? '☀️' : '🌙';
     }
 
-    // 병음에서 성조 패턴 추출 엔진 (ā->1, á->2, ǎ->3, à->4, 경성->0)
-    function getTonePattern(pinyin) {
-        const toneMarks = {
-            'ā':1,'ē':1,'ī':1,'ō':1,'ū':1,'ǖ':1,
-            'á':2,'é':2,'í':2,'ó':2,'ú':2,'ǘ':2,
-            'ǎ':3,'ě':3,'ǐ':3,'ǒ':3,'ǔ':3,'ǚ':3,
-            'à':4,'è':4,'ì':4,'ò':4,'ù':4,'ǜ':4
-        };
-        // 공백 혹은 음절 단위 분리 기호 정리
-        const syllables = pinyin.toLowerCase().replace(/[^a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ\s]/g, '').split(/\s+/);
-        let pattern = [];
-        
-        syllables.forEach(s => {
-            if(!s) return;
-            let tone = 0; // 기본 경성
-            for (let char of s) {
-                if (toneMarks[char]) {
-                    tone = toneMarks[char];
-                    break;
+    // --- 화면 초기 구동 및 실시간 데이터 패치 ---
+    window.onload = async function() {
+        try {
+            const response = await fetch(CSV_URL);
+            if (!response.ok) throw new Error("네트워크 연결 실패");
+            const textData = await response.text();
+            
+            parseCSVData(textData);
+            
+            if (wordList.length < 5) {
+                document.getElementById('loading-text').innerText = "단어 파일에 최소 5개 이상의 단어가 필요합니다.";
+                return;
+            }
+
+            // 로딩 성공 후 메인 화면 활성화
+            switchScreen('main-screen');
+        } catch (error) {
+            console.error(error);
+            document.getElementById('loading-text').innerHTML = 
+                "<span style='color:var(--danger-color); font-weight:bold;'>단어 데이터를 가져오지 못했습니다.</span><br><br>" +
+                "1. 구글 시트의 상단 [공유] 단추를 눌러 '링크가 있는 모든 사용자에게 공개' 상태인지 꼭 확인해 주세요.<br>" +
+                "2. 시트 주소 및 네트워크 상태를 확인하세요.";
+        }
+    };
+
+    // 간단한 CSV 파서 (따옴표 및 쉼표 구분자 처리)
+    function parseCSVData(text) {
+        const lines = text.split(/\r?\n/);
+        let isFirstRow = true;
+
+        for (let line of lines) {
+            if (!line.trim()) continue;
+            
+            let row = [];
+            let insideQuote = false;
+            let currentCell = '';
+            
+            for (let i = 0; i < line.length; i++) {
+                let char = line[i];
+                if (char === '"') {
+                    insideQuote = !insideQuote;
+                } else if (char === ',' && !insideQuote) {
+                    row.push(currentCell.trim());
+                    currentCell = '';
+                } else {
+                    currentCell += char;
                 }
             }
-            pattern.push(tone);
-        });
-        return pattern.join('-');
-    }
+            row.push(currentCell.trim());
 
-    // 데이터 로드 및 전처리
-    function loadData() {
-        const text = document.getElementById('dataInput').value.trim();
-        if (!text) {
-            alert('데이터를 입력해주세요.');
-            return;
-        }
-
-        wordList = [];
-        const lines = text.split('\n');
-        
-        lines.forEach(line => {
-            const row = line.split('\t'); // 스프레드시트 탭 복사 매칭
-            if (row.length >= 3) {
-                const hanzi = row[0].trim();
-                const pinyin = row[1].trim();
-                const meaning = row[2].trim();
-                const tone = getTonePattern(pinyin);
-                
-                if (hanzi && meaning) {
-                    wordList.push({ hanzi, pinyin, meaning, tone });
+            // 상단 제목 행 패스 알고리즘 (한자, 뜻, 병음 같은 키워드 유무 체크)
+            if (isFirstRow) {
+                const combinedStr = row.join('');
+                isFirstRow = false;
+                if (combinedStr.includes('한자') || combinedStr.includes('뜻') || combinedStr.includes('병음') || combinedStr.includes('중국어')) {
+                    continue; 
                 }
             }
-        });
 
-        if (wordList.length < 5) {
-            alert('5개 이상의 단어가 필요합니다. (현재 인식된 단어: ' + wordList.length + '개)');
-            document.getElementById('menuArea').style.display = 'none';
-            return;
+            if (row[COL_HANZI] && row[COL_PINYIN] && row[COL_MEANING]) {
+                wordList.push({
+                    hanzi: row[COL_HANZI],
+                    pinyin: row[COL_PINYIN],
+                    meaning: row[COL_MEANING]
+                });
+            }
         }
-
-        document.getElementById('loadStatus').innerText = `✅ 총 ${wordList.length}개 단어 로드 완료!`;
-        document.getElementById('loadStatus').style.color = 'var(--success-color)';
-        document.getElementById('menuArea').style.display = 'block';
-        
-        buildStudyTable();
     }
 
-    // 공부방 테이블 빌드
-    function buildStudyTable() {
-        const tbody = document.getElementById('wordTableBody');
+    // --- 중국어 성조 구조화 도구 ---
+    // 예: "nǐ hǎo" -> "33", "bàba" -> "45"(경성) 등으로 치환해 같은 성조를 찾기 수월하게 함
+    function getWordTonePattern(pinyin) {
+        let p = pinyin.toLowerCase();
+        let syllables = p.split(/\s+/);
+        let pattern = syllables.map(s => {
+            if (/[āēīōūǖ]/.test(s)) return '1';
+            if (/[áéíóúǘ]/.test(s)) return '2';
+            if (/[ǎěǐǒǔǚ]/.test(s)) return '3';
+            if (/[àèìòùǜ]/.test(s)) return '4';
+            let m = s.match(/[1-4]/);
+            if (m) return m[0];
+            return '5'; // 성조 기호 없는 경우 경성(5) 취급
+        });
+        return pattern.join('');
+    }
+
+    function getToneKoreanName(pattern) {
+        return pattern.split('').map(t => t === '5' ? '경성' : t + '성').join(' + ');
+    }
+
+    // --- 유틸리티 함수 ---
+    function switchScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+        
+        // 홈 화면 일때만 상단 홈이동 버튼 가림
+        if (screenId === 'main-screen' || screenId === 'loading-screen') {
+            document.getElementById('back-btn').style.display = 'none';
+        } else {
+            document.getElementById('back-btn').style.display = 'block';
+        }
+    }
+
+    function goHome() {
+        switchScreen('main-screen');
+    }
+
+    // --- 공부방 기능 ---
+    function showStudyScreen() {
+        const tbody = document.getElementById('word-table-body');
         tbody.innerHTML = '';
         
         wordList.forEach(w => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><span class="hide-text" onclick="this.classList.toggle('revealed')">${w.hanzi}</span></td>
-                <td>${w.pinyin}</td>
-                <td style="color:var(--primary-color); font-weight:bold;">${w.tone}성</td>
-                <td><span class="hide-text" onclick="this.classList.toggle('revealed')">${w.meaning}</span></td>
-            `;
+            tr.innerHTML = `<td>${w.hanzi}</td><td>${w.pinyin}</td><td>${w.meaning}</td>`;
             tbody.appendChild(tr);
         });
+        switchScreen('study-screen');
     }
 
-    function openStudySection() {
-        switchSection('studySection');
-    }
-
-    function goHome() {
-        switchSection('setupSection');
-    }
-
-    function switchSection(id) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
-
-    // 퀴즈 시작
-    function startQuiz(mode) {
-        quizMode = mode;
+    // --- 테스트 제어 모듈 ---
+    function startTest() {
+        currentMode = document.getElementById('mode-select').value;
+        const countVal = document.getElementById('count-select').value;
+        
+        wrongWords = [];
         score = 0;
-        currentQuizIndex = 0;
-        // 단어 리스트 랜덤 셔플
-        quizQuestions = [...wordList].sort(() => Math.random() - 0.5);
-        
-        switchSection('quizSection');
-        showQuestion();
-    }
+        currentIdx = 0;
 
-    // 문제 보이기
-    function showQuestion() {
-        document.getElementById('nextBtn').style.display = 'none';
-        document.getElementById('feedbackBox').innerText = '';
-        
-        const currentWord = quizQuestions[currentQuizIndex];
-        const total = quizQuestions.length;
-        
-        document.getElementById('quizProgress').innerText = `문제 ${currentQuizIndex + 1} / ${total}`;
-        document.getElementById('progressFill').style.width = `${((currentQuizIndex + 1) / total) * 100}%`;
-
-        let qHint = '';
-        let qText = '';
-        let options = [];
-        let correctAnswer = '';
-
-        if (quizMode === 1) {
-            qHint = '중국어 한자의 올바른 한국어 뜻을 고르세요.';
-            qText = currentWord.hanzi;
-            correctAnswer = currentWord.meaning;
-            options = generateOptions(correctAnswer, 'meaning');
-        } else if (quizMode === 2) {
-            qHint = '중국어 병음의 올바른 한국어 뜻을 고르세요.';
-            qText = currentWord.pinyin;
-            correctAnswer = currentWord.meaning;
-            options = generateOptions(correctAnswer, 'meaning');
-        } else if (quizMode === 3) {
-            qHint = `[성조 패턴: ${currentWord.tone}성] 제시된 단어와 '성조 배열'이 같은 한자를 고르세요.`;
-            qText = currentWord.hanzi + ` (${currentWord.pinyin})`;
-            correctAnswer = currentWord.hanzi;
-            options = generateToneOptions(currentWord);
-        } else if (quizMode === 4) {
-            qHint = '한국어 뜻에 일치하는 올바른 중국어 한자를 고르세요.';
-            qText = currentWord.meaning;
-            correctAnswer = currentWord.hanzi;
-            options = generateOptions(correctAnswer, 'hanzi');
+        // 모드 3일 경우 필터링: 성조 비교를 하려면 해당 단어 외에 동일 성조를 가진 단어가 최소 1개는 더 시트에 존재해야 성립함
+        let pool = [...wordList];
+        if (currentMode === "3") {
+            pool = wordList.filter(word => {
+                const targetPattern = getWordTonePattern(word.pinyin);
+                return wordList.some(w => w.hanzi !== word.hanzi && getWordTonePattern(w.pinyin) === targetPattern);
+            });
+            
+            if (pool.length === 0) {
+                alert("성조 패턴이 겹치는 단어가 충분하지 않습니다. 단어장에 단어를 더 보강하거나 다른 모드를 선택해주세요.");
+                return;
+            }
         }
 
-        document.getElementById('questionHint').innerText = qHint;
-        document.getElementById('questionText').innerText = qText;
+        // 문제 셔플 및 세팅
+        pool.sort(() => 0.5 - Math.random());
+        let maxQuestions = countVal === 'all' ? pool.length : parseInt(countVal);
+        quizQueue = pool.slice(0, Math.min(maxQuestions, pool.length));
 
-        // 보기 렌더링
-        const container = document.getElementById('optionsContainer');
+        showQuestion();
+        switchScreen('test-screen');
+    }
+
+    function showQuestion() {
+        isAnswered = false;
+        document.getElementById('next-btn').style.display = 'none';
+        document.getElementById('feedback-box').className = 'feedback-box';
+        document.getElementById('feedback-box').style.display = 'none';
+
+        // 진행률 표시
+        document.getElementById('quiz-progress').innerText = `문제 ${currentIdx + 1} / ${quizQueue.length}`;
+        const percent = ((currentIdx) / quizQueue.length) * 100;
+        document.getElementById('progress-bar').style.width = `${percent}%`;
+
+        const currentWord = quizQueue[currentIdx];
+        const titleEl = document.getElementById('question-title');
+        const textEl = document.getElementById('question-text');
+
+        // 모드별 질문 세팅 정의
+        if (currentMode === "1") {
+            titleEl.innerText = "제시된 한자의 올바른 '한국어 뜻'을 고르세요.";
+            textEl.innerText = currentWord.hanzi;
+        } else if (currentMode === "2") {
+            titleEl.innerText = "제시된 병음의 올바른 '한국어 뜻'을 고르세요.";
+            textEl.innerText = currentWord.pinyin;
+        } else if (currentMode === "3") {
+            titleEl.innerText = `[ ${currentWord.hanzi} ] 와(과) '똑같은 성조 패턴'을 가진 한자를 고르세요.`;
+            textEl.innerText = `${currentWord.hanzi}`;
+        } else if (currentMode === "4") {
+            titleEl.innerText = "제시된 뜻을 가진 알맞은 '한자'를 고르세요.";
+            textEl.innerText = currentWord.meaning;
+        }
+
+        // 5지선다 오지선다 보기 구성
+        generateFiveOptions(currentWord);
+    }
+
+    function generateFiveOptions(currentWord) {
+        const container = document.getElementById('options-container');
         container.innerHTML = '';
-        
-        options.forEach((opt, index) => {
+
+        let correctAns = "";
+        let wrongPool = [];
+
+        if (currentMode === "1" || currentMode === "2") {
+            correctAns = currentWord.meaning;
+            wrongPool = wordList.filter(w => w.meaning !== correctAns).map(w => w.meaning);
+        } else if (currentMode === "3") {
+            const currentPattern = getWordTonePattern(currentWord.pinyin);
+            // 정답용 보기 추출: 한자가 다르면서 성조 배열이 같은 단어들 중 택일
+            let sameTones = wordList.filter(w => w.hanzi !== currentWord.hanzi && getWordTonePattern(w.pinyin) === currentPattern);
+            let chosenCorrectWord = sameTones[Math.floor(Math.random() * sameTones.length)];
+            correctAns = chosenCorrectWord.hanzi;
+
+            // 오답용 보기 추출: 성조 배열이 다른 단어들
+            wrongPool = wordList.filter(w => getWordTonePattern(w.pinyin) !== currentPattern).map(w => w.hanzi);
+        } else if (currentMode === "4") {
+            correctAns = currentWord.hanzi;
+            wrongPool = wordList.filter(w => w.hanzi !== correctAns).map(w => w.hanzi);
+        }
+
+        // 중복 오답 제거 및 4개 랜덤 추출
+        wrongPool = [...new Set(wrongPool)].sort(() => 0.5 - Math.random());
+        let finalOptions = wrongPool.slice(0, 4);
+        finalOptions.push(correctAns);
+        // 보기 마구 섞기
+        finalOptions.sort(() => 0.5 - Math.random());
+
+        // 버튼 컴포넌트 생성 및 이벤트 장착
+        finalOptions.forEach((optValue) => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
-            
-            // 보기 텍스트 커스텀 설정 (성조 매칭 모드일 경우 병음 힌트 함께 제공)
-            if(quizMode === 3) {
-                const targetWord = wordList.find(w => w.hanzi === opt);
-                btn.innerText = `${index + 1}. ${opt} [${targetWord.pinyin}]`;
-            } else {
-                btn.innerText = `${index + 1}. ${opt}`;
-            }
-            
-            btn.onclick = () => checkAnswer(btn, opt, correctAnswer);
+            btn.innerText = optValue;
+            btn.onclick = () => checkAnswer(btn, optValue, correctAns, currentWord);
             container.appendChild(btn);
         });
     }
 
-    // 일반 5지선다 오답 구성 엔진
-    function generateOptions(correct, field) {
-        let choices = [correct];
-        let pool = wordList.map(w => w[field]).filter(v => v !== correct);
-        // 중복 제거 및 고유값 유지
-        pool = [...new Set(pool)].sort(() => Math.random() - 0.5);
+    // --- 정답 검증 및 피드백 출력 엔진 ---
+    function checkAnswer(selectedBtn, chosenValue, correctAnswer, currentWord) {
+        if (isAnswered) return; // 연속 클릭 방어
+        isAnswered = true;
+
+        const container = document.getElementById('options-container');
+        const buttons = container.querySelectorAll('.option-btn');
+        const feedbackBox = document.getElementById('feedback-box');
         
-        for (let i = 0; i < Math.min(4, pool.length); i++) {
-            choices.push(pool[i]);
-        }
-        // 보기 수가 5개가 모자랄 시 방어벽 코드
-        while(choices.length < 5 && choices.length < wordList.length) {
-            let rand = wordList[Math.floor(Math.random() * wordList.length)][field];
-            if(!choices.includes(rand)) choices.push(rand);
-        }
-        return choices.sort(() => Math.random() - 0.5);
-    }
+        // 모든 보기 비활성화
+        buttons.forEach(btn => btn.disabled = true);
 
-    // 3번 모드: 동일 성조 패턴을 가지는 보기 구성 엔진
-    function generateToneOptions(currentWord) {
-        // 정답 보기: 본인 한자
-        let choices = [currentWord.hanzi];
+        let isCorrect = (chosenValue === correctAnswer);
         
-        // 오답 풀: 성조가 다른 한자들만 필터링
-        let wrongPool = wordList.filter(w => w.tone !== currentWord.tone).map(w => w.hanzi);
-        wrongPool = [...new Set(wrongPool)].sort(() => Math.random() - 0.5);
-
-        for (let i = 0; i < Math.min(4, wrongPool.length); i++) {
-            choices.push(wrongPool[i]);
-        }
-
-        // 만약 전체 리스트 중 성조가 다른 단어가 모자랄 경우 무작위 채움
-        while (choices.length < 5) {
-            let rand = wordList[Math.floor(Math.random() * wordList.length)].hanzi;
-            if(!choices.includes(rand) && rand !== currentWord.hanzi) {
-                choices.push(rand);
-            }
-            if(choices.length >= wordList.length) break; // 무한루프 방지
-        }
-
-        return choices.sort(() => Math.random() - 0.5);
-    }
-
-    // 정답 체크 함수
-    function checkAnswer(selectedBtn, selectedValue, correctValue) {
-        const buttons = document.querySelectorAll('.option-btn');
-        buttons.forEach(btn => btn.disabled = true); // 한 번 클릭 시 전체 비활성화
-
-        const feedback = document.getElementById('feedbackBox');
-        
-        if (selectedValue === correctValue) {
-            selectedBtn.classList.add('correct');
-            feedback.innerText = '⭕ 정답입니다!';
-            feedback.style.color = 'var(--success-color)';
+        if (isCorrect) {
             score++;
+            selectedBtn.classList.add('correct');
+            feedbackBox.className = 'feedback-box correct';
+            feedbackBox.innerHTML = `<strong>정답입니다!</strong>`;
         } else {
             selectedBtn.classList.add('incorrect');
-            feedback.innerText = `❌ 오답입니다. 정답은 [ ${correctValue} ] 입니다.`;
-            feedback.style.color = 'var(--error-color)';
+            feedbackBox.className = 'feedback-box incorrect';
+            feedbackBox.innerHTML = `<strong>오답입니다.</strong><br>정답은 <b>[ ${correctAnswer} ]</b> 입니다.`;
             
-            // 올바른 버튼 찾아서 초록색 힌트 표기
+            // 정답 단어 하이라이트 표시 처리
             buttons.forEach(btn => {
-                // 보기 안 문자열 파싱 매칭 검증
-                if (btn.innerText.includes(correctValue)) {
-                    btn.classList.add('correct');
-                }
+                if (btn.innerText === correctAnswer) btn.classList.add('correct');
+            });
+
+            // 오답 기록 누적
+            wrongWords.push({
+                question: document.getElementById('question-text').innerText,
+                userAns: chosenValue,
+                correctAns: correctAnswer,
+                info: `한자: ${currentWord.hanzi} | 병음: ${currentWord.pinyin} | 뜻: ${currentWord.meaning}`
             });
         }
 
-        document.getElementById('nextBtn').style.display = 'inline-block';
+        // 학습 보조 피드백 추가
+        if (currentMode === "3") {
+            const currentPattern = getWordTonePattern(currentWord.pinyin);
+            // 정답을 매칭한 실제 단어 정보 찾기
+            const correctWordObj = wordList.find(w => w.hanzi === correctAnswer);
+            feedbackBox.innerHTML += `<br><span style='font-size:0.85rem;'>💡 문제 단어 성조: ${currentWord.pinyin} (${getToneKoreanName(currentPattern)})<br>💡 정답 단어 성조: ${correctWordObj.pinyin} (${getToneKoreanName(getWordTonePattern(correctWordObj.pinyin))})</span>`;
+        } else {
+            feedbackBox.innerHTML += `<br><span style='font-size:0.85rem;'>💡 상세 정보 ➔ [ 한자: ${currentWord.hanzi} | 병음: ${currentWord.pinyin} | 뜻: ${currentWord.meaning} ]</span>`;
+        }
+
+        document.getElementById('next-btn').style.display = 'block';
     }
 
-    // 다음 문제로 이동
     function nextQuestion() {
-        currentQuizIndex++;
-        if (currentQuizIndex < quizQuestions.length) {
+        currentIdx++;
+        if (currentIdx < quizQueue.length) {
             showQuestion();
         } else {
-            // 결과 창 표기
-            alert(`🎉 테스트가 종료되었습니다!\n최종 점수: ${score} / ${quizQuestions.length} 문제 맞춤`);
-            goHome();
+            showResult();
         }
     }
 
-    // 중간 일시 정지 기능
-    function pauseQuiz() {
-        document.getElementById('pauseOverlay').classList.add('active');
+    // --- 중간 중지 기능 ---
+    function stopTest() {
+        if (confirm("정말로 테스트를 중단하시겠습니까? 지금까지 푼 문제까지의 기록으로 결과가 집계됩니다.")) {
+            if (isAnswered) {
+                // 이미 정오답이 확인된 문제까지 완료 처리하고 결과로 전달
+                currentIdx++;
+            }
+            showResult();
+        }
     }
 
-    function resumeQuiz() {
-        document.getElementById('pauseOverlay').classList.remove('active');
-    }
+    // --- 결과 보기 모듈 ---
+    function showResult() {
+        document.getElementById('progress-bar').style.width = `100%`;
+        switchScreen('result-screen');
+        
+        const totalPlayed = Math.max(currentIdx, 1); // 분모가 0이 되는 현상 방지
+        document.getElementById('score-text').innerText = `${score} / ${totalPlayed}`;
 
-    function confirmStopQuiz() {
-        if (confirm('진행중인 시험을 완전히 종료하고 메인 화면으로 돌아갈까요?')) {
-            goHome();
+        const wrongSection = document.getElementById('wrong-section');
+        const wrongContainer = document.getElementById('wrong-words-container');
+        wrongContainer.innerHTML = '';
+
+        if (wrongWords.length > 0) {
+            wrongSection.style.display = 'block';
+            wrongWords.forEach(w => {
+                const div = document.createElement('div');
+                div.className = 'wrong-item';
+                div.innerHTML = `❓ <b>문제:</b> ${w.question} ➔ ❌ <b>내가 쓴 답:</b> ${w.userAns}<br><small style='color:var(--text-muted);'>✨ ${w.info}</small>`;
+                wrongContainer.appendChild(div);
+            });
+        } else {
+            wrongSection.style.display = 'none';
         }
     }
 </script>
