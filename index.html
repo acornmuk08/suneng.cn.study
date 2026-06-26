@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수능특강 중국어 암기 프로그램</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --text-secondary: #666666;
+            --primary-color: #4a90e2;
+            --primary-hover: #357abd;
+            --success-color: #2ec4b6;
+            --error-color: #e71d36;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #f0f0f0;
+            --text-secondary: #b0b0b0;
+            --primary-color: #3a7bd5;
+            --primary-hover: #2a6bb5;
+            --success-color: #1b9aaa;
+            --error-color: #ff4d6d;
+            --border-color: #333333;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            transition: background-color 0.3s;
+            position: relative;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin: 0;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border-color);
+        }
+
+        .btn-danger {
+            background-color: var(--error-color);
+            color: white;
+        }
+
+        .mode-toggle-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* 데이터 입력 영역 */
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            resize: vertical;
+            font-family: monospace;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        /* 단어장 리스트 스타일 */
+        .word-table-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-color);
+            position: sticky;
+            top: 0;
+        }
+
+        .hide-text {
+            background-color: var(--text-color);
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 4px;
+            padding: 2px 6px;
+        }
+
+        .hide-text:hover {
+            opacity: 0.8;
+        }
+
+        .hide-text.revealed {
+            background-color: transparent;
+            color: inherit;
+        }
+
+        /* 퀴즈 영역 스타일 */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .question-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            border-radius: 12px;
+        }
+
+        .question-text {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .question-hint {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .option-btn {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-color);
+            background-color: var(--bg-color);
+        }
+
+        .option-btn.correct {
+            background-color: var(--success-color) !important;
+            color: white !important;
+            border-color: var(--success-color) !important;
+        }
+
+        .option-btn.incorrect {
+            background-color: var(--error-color) !important;
+            color: white !important;
+            border-color: var(--error-color) !important;
+        }
+
+        .feedback-box {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            min-height: 27px;
+        }
+
+        /* 정지 화면 오버레이 */
+        .pause-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            z-index: 10;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .pause-overlay.active {
+            display: flex;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="pauseOverlay" class="pause-overlay">
+        <h2>일시 정지됨</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;">잠시 학습을 멈추었습니다.</p>
+        <button class="btn" onclick="resumeQuiz()">다시 시작하기</button>
+    </div>
+
+    <header>
+        <h1 id="programTitle" onclick="goHome()" style="cursor:pointer;">🇨🇳 중국어 단어 암기기</h1>
+        <button id="themeToggle" class="mode-toggle-btn" onclick="toggleDarkMode()">🌙</button>
+    </header>
+
+    <div id="setupSection" class="section active">
+        <h3>1. 스프레드시트 데이터 붙여넣기</h3>
+        <p style="font-size:14px; color:var(--text-secondary);">스프레드시트에서 <b>한자, 병음, 한국어뜻</b> 열을 복사하여 아래에 붙여넣으세요. (탭 구분 지원)</p>
+        <textarea id="dataInput" placeholder="예시 표기형식:&#10;学生	xuéshēng	학생&#10;老师	lǎoshī	선생님&#10;韩国	hánguó	한국"></textarea>
+        <div style="margin-bottom: 25px;">
+            <button class="btn" onclick="loadData()">데이터 불러오기 / 리셋</button>
+            <span id="loadStatus" style="margin-left: 10px; font-weight: 600;"></span>
+        </div>
+
+        <div id="menuArea" style="display: none;">
+            <h3>2. 사전 학습 (전체 단어 보기)</h3>
+            <button class="btn btn-secondary" onclick="openStudySection()">시험 보기 전 단어 외우기</button>
+
+            <h3 style="margin-top:25px;">3. 테스트 모드 선택</h3>
+            <div class="menu-grid">
+                <button class="btn" onclick="startQuiz(1)">1. 한자 ➔ 한국어 뜻</button>
+                <button class="btn" onclick="startQuiz(2)">2. 병음 ➔ 한국어 뜻</button>
+                <button class="btn" onclick="startQuiz(3)">3. 동일 성조 한자 찾기</button>
+                <button class="btn" onclick="startQuiz(4)">4. 한국어 뜻 ➔ 한자</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="studySection" class="section">
+        <div style="display:flex; justify-content: space-between; align-items:center;">
+            <h3>시험 전 전체 단어 리스트</h3>
+            <button class="btn btn-secondary" onclick="goHome()">메인으로</button>
+        </div>
+        <p style="font-size:14px; color:var(--text-secondary);">뜻이나 한자를 클릭하면 가려진 텍스트를 볼 수 있어 자가 테스트가 가능합니다.</p>
+        <div class="word-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>한자</th>
+                        <th>병음</th>
+                        <th>성조 패턴</th>
+                        <th>한국어 뜻</th>
+                    </tr>
+                </thead>
+                <tbody id="wordTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="quizSection" class="section">
+        <div class="quiz-header">
+            <span id="quizProgress" style="font-weight: 600;">문제 1 / 10</span>
+            <div>
+                <button class="btn btn-secondary" style="padding: 6px 12px;" onclick="pauseQuiz()">⏸ 중간 정지</button>
+                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="confirmStopQuiz()">종료</button>
+            </div>
+        </div>
+        <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+        </div>
+
+        <div class="question-box">
+            <div id="questionHint" class="question-hint">질문 유형</div>
+            <div id="questionText" class="question-text">学生</div>
+        </div>
+
+        <div id="optionsContainer" class="options-container">
+            </div>
+
+        <div id="feedbackBox" class="feedback-box"></div>
+        
+        <div style="text-align: right;">
+            <button id="nextBtn" class="btn" style="display: none;" onclick="nextQuestion()">다음 문제 ➔</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 기본 샘플 데이터 (스프레드시트 비어있을 시 최초 구동용)
+    const sampleData = `你好	nǐhǎo	안녕하세요
+谢谢	xièxie	감사합니다
+再见	zàijiàn	안녕히 가세요
+苹果	píngguǒ	사과
+学生	xuéshēng	학생
+老师	lǎoshī	선생님
+中国	zhōngguó	중국
+韩国	hánguó	한국
+面包	miànbāo	빵
+咖啡	kāfēi	커피`;
+
+    let wordList = [];
+    let quizQuestions = [];
+    let currentQuizIndex = 0;
+    let quizMode = 1;
+    let score = 0;
+
+    // 초기 실행
+    window.onload = function() {
+        document.getElementById('dataInput').value = sampleData;
+        loadData();
+    };
+
+    // 다크모드 토글
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        document.getElementById('themeToggle').innerText = isDark ? '☀️' : '🌙';
+    }
+
+    // 병음에서 성조 패턴 추출 엔진 (ā->1, á->2, ǎ->3, à->4, 경성->0)
+    function getTonePattern(pinyin) {
+        const toneMarks = {
+            'ā':1,'ē':1,'ī':1,'ō':1,'ū':1,'ǖ':1,
+            'á':2,'é':2,'í':2,'ó':2,'ú':2,'ǘ':2,
+            'ǎ':3,'ě':3,'ǐ':3,'ǒ':3,'ǔ':3,'ǚ':3,
+            'à':4,'è':4,'ì':4,'ò':4,'ù':4,'ǜ':4
+        };
+        // 공백 혹은 음절 단위 분리 기호 정리
+        const syllables = pinyin.toLowerCase().replace(/[^a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ\s]/g, '').split(/\s+/);
+        let pattern = [];
+        
+        syllables.forEach(s => {
+            if(!s) return;
+            let tone = 0; // 기본 경성
+            for (let char of s) {
+                if (toneMarks[char]) {
+                    tone = toneMarks[char];
+                    break;
+                }
+            }
+            pattern.push(tone);
+        });
+        return pattern.join('-');
+    }
+
+    // 데이터 로드 및 전처리
+    function loadData() {
+        const text = document.getElementById('dataInput').value.trim();
+        if (!text) {
+            alert('데이터를 입력해주세요.');
+            return;
+        }
+
+        wordList = [];
+        const lines = text.split('\n');
+        
+        lines.forEach(line => {
+            const row = line.split('\t'); // 스프레드시트 탭 복사 매칭
+            if (row.length >= 3) {
+                const hanzi = row[0].trim();
+                const pinyin = row[1].trim();
+                const meaning = row[2].trim();
+                const tone = getTonePattern(pinyin);
+                
+                if (hanzi && meaning) {
+                    wordList.push({ hanzi, pinyin, meaning, tone });
+                }
+            }
+        });
+
+        if (wordList.length < 5) {
+            alert('5개 이상의 단어가 필요합니다. (현재 인식된 단어: ' + wordList.length + '개)');
+            document.getElementById('menuArea').style.display = 'none';
+            return;
+        }
+
+        document.getElementById('loadStatus').innerText = `✅ 총 ${wordList.length}개 단어 로드 완료!`;
+        document.getElementById('loadStatus').style.color = 'var(--success-color)';
+        document.getElementById('menuArea').style.display = 'block';
+        
+        buildStudyTable();
+    }
+
+    // 공부방 테이블 빌드
+    function buildStudyTable() {
+        const tbody = document.getElementById('wordTableBody');
+        tbody.innerHTML = '';
+        
+        wordList.forEach(w => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><span class="hide-text" onclick="this.classList.toggle('revealed')">${w.hanzi}</span></td>
+                <td>${w.pinyin}</td>
+                <td style="color:var(--primary-color); font-weight:bold;">${w.tone}성</td>
+                <td><span class="hide-text" onclick="this.classList.toggle('revealed')">${w.meaning}</span></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function openStudySection() {
+        switchSection('studySection');
+    }
+
+    function goHome() {
+        switchSection('setupSection');
+    }
+
+    function switchSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    // 퀴즈 시작
+    function startQuiz(mode) {
+        quizMode = mode;
+        score = 0;
+        currentQuizIndex = 0;
+        // 단어 리스트 랜덤 셔플
+        quizQuestions = [...wordList].sort(() => Math.random() - 0.5);
+        
+        switchSection('quizSection');
+        showQuestion();
+    }
+
+    // 문제 보이기
+    function showQuestion() {
+        document.getElementById('nextBtn').style.display = 'none';
+        document.getElementById('feedbackBox').innerText = '';
+        
+        const currentWord = quizQuestions[currentQuizIndex];
+        const total = quizQuestions.length;
+        
+        document.getElementById('quizProgress').innerText = `문제 ${currentQuizIndex + 1} / ${total}`;
+        document.getElementById('progressFill').style.width = `${((currentQuizIndex + 1) / total) * 100}%`;
+
+        let qHint = '';
+        let qText = '';
+        let options = [];
+        let correctAnswer = '';
+
+        if (quizMode === 1) {
+            qHint = '중국어 한자의 올바른 한국어 뜻을 고르세요.';
+            qText = currentWord.hanzi;
+            correctAnswer = currentWord.meaning;
+            options = generateOptions(correctAnswer, 'meaning');
+        } else if (quizMode === 2) {
+            qHint = '중국어 병음의 올바른 한국어 뜻을 고르세요.';
+            qText = currentWord.pinyin;
+            correctAnswer = currentWord.meaning;
+            options = generateOptions(correctAnswer, 'meaning');
+        } else if (quizMode === 3) {
+            qHint = `[성조 패턴: ${currentWord.tone}성] 제시된 단어와 '성조 배열'이 같은 한자를 고르세요.`;
+            qText = currentWord.hanzi + ` (${currentWord.pinyin})`;
+            correctAnswer = currentWord.hanzi;
+            options = generateToneOptions(currentWord);
+        } else if (quizMode === 4) {
+            qHint = '한국어 뜻에 일치하는 올바른 중국어 한자를 고르세요.';
+            qText = currentWord.meaning;
+            correctAnswer = currentWord.hanzi;
+            options = generateOptions(correctAnswer, 'hanzi');
+        }
+
+        document.getElementById('questionHint').innerText = qHint;
+        document.getElementById('questionText').innerText = qText;
+
+        // 보기 렌더링
+        const container = document.getElementById('optionsContainer');
+        container.innerHTML = '';
+        
+        options.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            
+            // 보기 텍스트 커스텀 설정 (성조 매칭 모드일 경우 병음 힌트 함께 제공)
+            if(quizMode === 3) {
+                const targetWord = wordList.find(w => w.hanzi === opt);
+                btn.innerText = `${index + 1}. ${opt} [${targetWord.pinyin}]`;
+            } else {
+                btn.innerText = `${index + 1}. ${opt}`;
+            }
+            
+            btn.onclick = () => checkAnswer(btn, opt, correctAnswer);
+            container.appendChild(btn);
+        });
+    }
+
+    // 일반 5지선다 오답 구성 엔진
+    function generateOptions(correct, field) {
+        let choices = [correct];
+        let pool = wordList.map(w => w[field]).filter(v => v !== correct);
+        // 중복 제거 및 고유값 유지
+        pool = [...new Set(pool)].sort(() => Math.random() - 0.5);
+        
+        for (let i = 0; i < Math.min(4, pool.length); i++) {
+            choices.push(pool[i]);
+        }
+        // 보기 수가 5개가 모자랄 시 방어벽 코드
+        while(choices.length < 5 && choices.length < wordList.length) {
+            let rand = wordList[Math.floor(Math.random() * wordList.length)][field];
+            if(!choices.includes(rand)) choices.push(rand);
+        }
+        return choices.sort(() => Math.random() - 0.5);
+    }
+
+    // 3번 모드: 동일 성조 패턴을 가지는 보기 구성 엔진
+    function generateToneOptions(currentWord) {
+        // 정답 보기: 본인 한자
+        let choices = [currentWord.hanzi];
+        
+        // 오답 풀: 성조가 다른 한자들만 필터링
+        let wrongPool = wordList.filter(w => w.tone !== currentWord.tone).map(w => w.hanzi);
+        wrongPool = [...new Set(wrongPool)].sort(() => Math.random() - 0.5);
+
+        for (let i = 0; i < Math.min(4, wrongPool.length); i++) {
+            choices.push(wrongPool[i]);
+        }
+
+        // 만약 전체 리스트 중 성조가 다른 단어가 모자랄 경우 무작위 채움
+        while (choices.length < 5) {
+            let rand = wordList[Math.floor(Math.random() * wordList.length)].hanzi;
+            if(!choices.includes(rand) && rand !== currentWord.hanzi) {
+                choices.push(rand);
+            }
+            if(choices.length >= wordList.length) break; // 무한루프 방지
+        }
+
+        return choices.sort(() => Math.random() - 0.5);
+    }
+
+    // 정답 체크 함수
+    function checkAnswer(selectedBtn, selectedValue, correctValue) {
+        const buttons = document.querySelectorAll('.option-btn');
+        buttons.forEach(btn => btn.disabled = true); // 한 번 클릭 시 전체 비활성화
+
+        const feedback = document.getElementById('feedbackBox');
+        
+        if (selectedValue === correctValue) {
+            selectedBtn.classList.add('correct');
+            feedback.innerText = '⭕ 정답입니다!';
+            feedback.style.color = 'var(--success-color)';
+            score++;
+        } else {
+            selectedBtn.classList.add('incorrect');
+            feedback.innerText = `❌ 오답입니다. 정답은 [ ${correctValue} ] 입니다.`;
+            feedback.style.color = 'var(--error-color)';
+            
+            // 올바른 버튼 찾아서 초록색 힌트 표기
+            buttons.forEach(btn => {
+                // 보기 안 문자열 파싱 매칭 검증
+                if (btn.innerText.includes(correctValue)) {
+                    btn.classList.add('correct');
+                }
+            });
+        }
+
+        document.getElementById('nextBtn').style.display = 'inline-block';
+    }
+
+    // 다음 문제로 이동
+    function nextQuestion() {
+        currentQuizIndex++;
+        if (currentQuizIndex < quizQuestions.length) {
+            showQuestion();
+        } else {
+            // 결과 창 표기
+            alert(`🎉 테스트가 종료되었습니다!\n최종 점수: ${score} / ${quizQuestions.length} 문제 맞춤`);
+            goHome();
+        }
+    }
+
+    // 중간 일시 정지 기능
+    function pauseQuiz() {
+        document.getElementById('pauseOverlay').classList.add('active');
+    }
+
+    function resumeQuiz() {
+        document.getElementById('pauseOverlay').classList.remove('active');
+    }
+
+    function confirmStopQuiz() {
+        if (confirm('진행중인 시험을 완전히 종료하고 메인 화면으로 돌아갈까요?')) {
+            goHome();
+        }
+    }
+</script>
+
+</body>
+</html>
