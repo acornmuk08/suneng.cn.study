@@ -1,5 +1,23 @@
 # 수능 중국어 기본 어휘 VOCA 입니다.
 
+## 사용법
+
+1. 먼저
+<img width="690" height="172" alt="image" src="https://github.com/user-attachments/assets/93c4ddb2-77c6-46dd-9ca1-0f1dce417d96" />
+__형광펜 칠한 곳을 클릭합니다.__
+
+2. 우측의
+<img width="316" height="183" alt="image" src="https://github.com/user-attachments/assets/37065bb5-8e59-4732-9c39-61baab03ec09" />
+__형광펜 칠한 곳을 클릭하여 파일을 다운로드 합니다.__
+
+3. 이후
+<img width="517" height="174" alt="image" src="https://github.com/user-attachments/assets/2ac0b37d-d6d6-4159-b182-495be823c75f" />
+
+다운로드한 파일을 이곳에다 업로드 하여 학습을 시작하시면 됩니다!
+
+
+
+
 ## 개요
 
 **이 프로그램은 html과 javascript로 동작합니다.**
